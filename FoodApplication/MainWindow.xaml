@@ -1,12 +1,69 @@
-﻿<Window x:Class="FoodApplication.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FoodApplication"
+        xmlns:Models="clr-namespace:FoodApplication.Models" x:Class="FoodApplication.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" Height="467.631" Width="850.896" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="foodViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Food}, CreateList=True}"/>
+        <CollectionViewSource x:Key="mealViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Meal}, CreateList=True}"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource foodViewSource}">
+
+        <DataGrid x:Name="foodDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,518,301" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="foodIdColumn" Width="SizeToHeader" Header="Food Id" Binding="{Binding FoodId}"/>
+                <DataGridTextColumn x:Name="nameColumn" Width="SizeToHeader" Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn x:Name="kcalColumn" Width="SizeToHeader" Header="Kcal" Binding="{Binding Kcal}"/>
+                <DataGridTextColumn x:Name="carbsColumn" Width="SizeToHeader" Header="Carbs" Binding="{Binding Carbs}"/>
+                <DataGridTextColumn x:Name="fatColumn" Width="SizeToHeader" Header="Fat" Binding="{Binding Fat}"/>
+                <DataGridTextColumn x:Name="proteinsColumn" Width="SizeToHeader" Header="Proteins" Binding="{Binding Proteins}"/>
+                <DataGridTextColumn x:Name="kindColumn" Width="SizeToHeader" Header="Rodzaj" Binding="{Binding Kind}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="mealDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource mealViewSource}}" Margin="10,141,219,97" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn x:Name="dateColumn" Header="Date" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding Date}">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="False"></Setter>
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="food0IdColumn" Binding="{Binding Food0}" Header="Food 0 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food1IdColumn" Binding="{Binding Food1}" Header="Food 1 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food2IdColumn" Binding="{Binding Food2}" Header="Food 2 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food3IdColumn" Binding="{Binding Food3}" Header="Food 3 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food4IdColumn" Binding="{Binding Food4}" Header="Food 4 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food5IdColumn" Binding="{Binding Food5}" Header="Food 5 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food6IdColumn" Binding="{Binding Food6}" Header="Food 6 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food7IdColumn" Binding="{Binding Food7}" Header="Food 7 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food8IdColumn" Binding="{Binding Food8}" Header="Food 8 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="food9IdColumn" Binding="{Binding Food9}" Header="Food 9 Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="mealIdColumn" Binding="{Binding MealId}" Header="Meal Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="nameColumn1" Binding="{Binding Name}" Header="Name" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight0Column" Binding="{Binding Weight0}" Header="Weight 0" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight1Column" Binding="{Binding Weight1}" Header="Weight 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight2Column" Binding="{Binding Weight2}" Header="Weight 2" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight3Column" Binding="{Binding Weight3}" Header="Weight 3" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight4Column" Binding="{Binding Weight4}" Header="Weight 4" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight5Column" Binding="{Binding Weight5}" Header="Weight 5" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight6Column" Binding="{Binding Weight6}" Header="Weight 6" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight7Column" Binding="{Binding Weight7}" Header="Weight 7" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight8Column" Binding="{Binding Weight8}" Header="Weight 8" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="weight9Column" Binding="{Binding Weight9}" Header="Weight 9" Width="SizeToHeader"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btnSave" Content="Button" HorizontalAlignment="Left" Margin="476,64,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
+
     </Grid>
 </Window>
