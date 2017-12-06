@@ -11,7 +11,7 @@
         <CollectionViewSource x:Key="foodViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Food}, CreateList=True}"/>
         <CollectionViewSource x:Key="mealViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Meal}, CreateList=True}"/>
         <Style TargetType="DataGridCell">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
     </Window.Resources>
@@ -31,22 +31,32 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Content="Nazwa: " Margin="5"/>
-                    <Label Grid.Row="1" Grid.Column="0" Content="Ilość kcal w 100g: " Margin="5"/>
-                    <Label Grid.Row="2" Grid.Column="0" Content="Ilość węglowodanów w 100g: " Margin="5"/>
-                    <Label Grid.Row="3" Grid.Column="0" Content="Ilość tłuszczu w 100g: " Margin="5"/>
-                    <Label Grid.Row="4" Grid.Column="0" Content="Ilość białka w 100g: " Margin="5"/>
-                    <Label Grid.Row="5" Grid.Column="0" Content="Rodzaj: " Margin="5"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Nazwa: " Margin="5"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Ilość kcal w 100g: " Margin="5"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Ilość węglowodanów w 100g: " Margin="5"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="Ilość tłuszczu w 100g: " Margin="5"/>
+                    <Label Grid.Row="5" Grid.Column="0" Content="Ilość białka w 100g: " Margin="5"/>
+                    <Label Grid.Row="6" Grid.Column="0" Content="Rodzaj: " Margin="5"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Szukaj: " Margin="5"/>
 
-                    <TextBox x:Name="txtName" Grid.Column="1" Grid.Row="0" Margin="5"/>
-                    <TextBox x:Name="txtKcal" Grid.Column="1" Grid.Row="1" Margin="5"/>
-                    <TextBox x:Name="txtCarbs" Grid.Column="1" Grid.Row="2" Margin="5"/>
-                    <TextBox x:Name="txtFat" Grid.Column="1" Grid.Row="3" Margin="5"/>
-                    <TextBox x:Name="txtProteins" Grid.Column="1" Grid.Row="4" Margin="5"/>
-                    <TextBox x:Name="txtKind" Grid.Column="1" Grid.Row="5" Margin="5"/>
-                    <DataGrid x:Name="foodDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="5" IsReadOnly="true" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="0" Grid.RowSpan="6">
+                    <TextBox x:Name="txtName" Grid.Column="1" Grid.Row="1" Width="100" Margin="5"/>
+                    <TextBox x:Name="txtKcal" Grid.Column="1" Grid.Row="2" Margin="5"/>
+                    <TextBox x:Name="txtCarbs" Grid.Column="1" Grid.Row="3" Margin="5"/>
+                    <TextBox x:Name="txtFat" Grid.Column="1" Grid.Row="4" Margin="5"/>
+                    <TextBox x:Name="txtProteins" Grid.Column="1" Grid.Row="5" Margin="5"/>
+                    <TextBox x:Name="txtKind" Grid.Column="1" Grid.Row="6" Margin="5"/>
+                    <TextBox x:Name="txtFind" Grid.Column="2" Grid.Row="0" Margin="5"/>
+                    
+                    <DataGrid x:Name="foodDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected"  Margin="5" IsReadOnly="true" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="1" Grid.RowSpan="7">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Edytuj" Click="MenuItem_Click"/>
+                                <MenuItem Header="Usuń" Click="MenuItem_Click_1"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="nameColumn" Width="100" Header="Nazwa" Binding="{Binding Name}"/>
                             <DataGridTextColumn x:Name="kcalColumn" Width="100" Header="Kcal" Binding="{Binding Kcal}"/>
@@ -56,7 +66,7 @@
                             <DataGridTextColumn x:Name="kindColumn" Width="100" Header="Rodzaj" Binding="{Binding Kind}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="btnSave" Content="Zapisz" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="75" Click="btnSave_Click" Grid.Column="1" Grid.Row="7"/>
+                    <Button x:Name="btnSave" Content="Zapisz" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center"  Click="btnSave_Click" Grid.Column="1" Grid.Row="8"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabMeal" Header="Edycja Posiłków">

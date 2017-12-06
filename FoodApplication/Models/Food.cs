@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FoodApplication.Models
 {
-    class Food
+    public class Food
     {
         public long FoodId { get; set; }
         public float Kcal { get; set; }
@@ -14,8 +14,14 @@ namespace FoodApplication.Models
         public float Proteins { get; set; }
         public float Carbs { get; set; }
         public float Fat { get; set; }
+        public bool IsUsed { get; set; }
 
         public string Kind { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}/100g Rodzaj:{2}", Name, Kcal.ToString(), Kind);
+        }
 
     }
 }
