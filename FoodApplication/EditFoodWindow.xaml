@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FoodApplication"
         mc:Ignorable="d"
-        Title="EditFoodWindow" Height="300" Width="300" Closed="Window_Closed">
+        Title="EditFoodWindow" Height="450" Width="300" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -19,7 +19,10 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="Nazwa: " Margin="5"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Ilość kcal w 100g: " Margin="5"/>
@@ -27,13 +30,17 @@
             <Label Grid.Row="3" Grid.Column="0" Content="Ilość tłuszczu w 100g: " Margin="5"/>
             <Label Grid.Row="4" Grid.Column="0" Content="Ilość białka w 100g: " Margin="5"/>
             <Label Grid.Row="5" Grid.Column="0" Content="Rodzaj: " Margin="5"/>
+            <Label Grid.Row="7" Grid.Column="0" Content="Czy w opakowaniu:" Margin="5"/>
+            <Label Grid.Row="8" Grid.Column="0" Content="Ile waży opakowanie: " Margin="5"/>
 
-            <TextBox x:Name="txtName" Grid.Column="1" Grid.Row="0" Width="100" Margin="5"/>
+        <TextBox x:Name="txtName" Grid.Column="1" Grid.Row="0" Width="100" Margin="5"/>
             <TextBox x:Name="txtKcal" Grid.Column="1" Grid.Row="1" Margin="5"/>
             <TextBox x:Name="txtCarbs" Grid.Column="1" Grid.Row="2" Margin="5"/>
             <TextBox x:Name="txtFat" Grid.Column="1" Grid.Row="3" Margin="5"/>
             <TextBox x:Name="txtProteins" Grid.Column="1" Grid.Row="4" Margin="5"/>
             <TextBox x:Name="txtKind" Grid.Column="1" Grid.Row="5" Margin="5"/>
-        <Button x:Name="btnSave" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Content="Zapisz" Margin="5" Click="btnSave_Click"/>
+            <CheckBox x:Name="chkPackage" Grid.Column="1" Grid.Row="7" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtPackageWeight" Grid.Column="1" Grid.Row="8" Margin="5"/>
+        <Button x:Name="btnSave" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Zapisz" Margin="5" Click="btnSave_Click"/>
     </Grid>
 </Window>

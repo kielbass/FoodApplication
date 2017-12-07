@@ -15,6 +15,8 @@ namespace FoodApplication.Models
         public float Carbs { get; set; }
         public float Fat { get; set; }
         public bool IsUsed { get; set; }
+        public bool Package { get; set; } //czy jest zapakowane
+        public float PackageWeight { get; set; } // wagao pakowania
 
         public string Kind { get; set; }
 

@@ -24,6 +24,8 @@ namespace FoodApplication
     public partial class MainWindow : Window
     {
         private FoodContext _db = new FoodContext();
+        CollectionView _foodView;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -33,16 +35,17 @@ namespace FoodApplication
         {
 
             System.Windows.Data.CollectionViewSource foodViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("foodViewSource")));
-            // Załaduj dane poprzez ustawienie właściwości CollectionViewSource.Source:
-            // foodViewSource.Źródło = [ogólne źródło danych]
             System.Windows.Data.CollectionViewSource mealViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("mealViewSource")));
-            // Załaduj dane poprzez ustawienie właściwości CollectionViewSource.Source:
-            // mealViewSource.Źródło = [ogólne źródło danych]
+
             _db.Foods.Load();
             _db.Meals.Load();
 
             mealViewSource.Source = _db.Meals.Local;
             foodViewSource.Source = _db.Foods.Local;
+
+            //For filtering in foodDatagrid
+            _foodView = (CollectionView)CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource);
+            _foodView.Filter = FoodNameFilter;
         }
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -71,6 +74,10 @@ namespace FoodApplication
                 return false;
             if (!float.TryParse(txtCarbs.Text, out float d))
                 return false;
+            if (!float.TryParse(txtPackageWeight.Text, out float e))
+                return false;
+            if (chkPackage.IsChecked == null)
+                return false;
 
             return true;
         }
@@ -84,15 +91,21 @@ namespace FoodApplication
             float.TryParse(txtFat.Text, out float b);
             float.TryParse(txtProteins.Text, out float c);
             float.TryParse(txtCarbs.Text, out float d);
+            float.TryParse(txtPackageWeight.Text, out float e);
+            bool f = (bool)chkPackage.IsChecked;
 
-            Food temp= new Food()
+            Food temp = new Food()
             {
                 Name = txtName.Text,
-                Kind = txtName.Text,
+                Kind = txtKind.Text,
                 Kcal = a,
                 Fat = b,
                 Proteins = c,
-                Carbs = d
+                Carbs = d,
+                PackageWeight = e,
+                IsUsed = false,
+                Package = f
+
             };
             return temp;
         }
@@ -101,9 +114,8 @@ namespace FoodApplication
         {
             if(FoodTextsCheck())
             {
-                if(_db.Foods.Select(f => f.Name).Where(f=>f.Contains(txtName.Text)).Count() >0)
+                if(_db.Foods.Select(f => f.Name).Where(f=>f.Equals(txtName.Text)).Count() >0)
                 {
-
                     MessageBoxResult r = MessageBox.Show("Produkt o nazwie: " + txtName.Text + " istnieje, czy na pewno chcesz go dodać?", txtName.Text, MessageBoxButton.YesNo);
                     if(r == MessageBoxResult.Yes)
                     {
@@ -120,32 +132,12 @@ namespace FoodApplication
             }
         }
 
-        private void btnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            if(foodDataGrid.SelectedItem!=null)
-            {
-                Food temp = (Food)foodDataGrid.SelectedItem;
-                if (FoodTextsCheck())
-                {
-                    MessageBoxResult r = MessageBox.Show("Czy edytować?", "Pytanie", MessageBoxButton.YesNo);
-                    if (r == MessageBoxResult.Yes)
-                    {
-                        Food temp2 = MakeFoodFromBoxes();
-
-                        temp.Carbs = temp2.Carbs;
-                        temp.Proteins = temp2.Proteins;
-                        temp.Fat = temp2.Fat;
-                        temp.Kcal = temp2.Kcal;
-                        temp.Name = temp2.Name;
-                        temp.Kind = temp2.Kind;
-                        SaveAndRefresh();
-                    }
-
-                }
-            }
-
-        }
-
+        
+        /// <summary>
+        /// Edit in new window. Just because i can :).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             if(foodDataGrid.SelectedItem!=null)
@@ -155,7 +147,11 @@ namespace FoodApplication
                 win.ShowDialog();
             }
         }
-
+        /// <summary>
+        /// Deleting item.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             if(foodDataGrid.SelectedItem!=null)
@@ -169,7 +165,19 @@ namespace FoodApplication
                 }
             }
         }
+        private bool FoodNameFilter(Object item)
+        {
+            if (String.IsNullOrEmpty(txtFind.Text))
+                return true;
+            else
+                return ((item as Food).Name.IndexOf(txtFind.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+        private void txtFind_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource).Refresh();
+        }
     }
+    
 
    
 }

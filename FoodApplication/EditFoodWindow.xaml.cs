@@ -22,11 +22,13 @@ namespace FoodApplication
     {
         private Food _food;
         private MainWindow _window;
+
         public EditFoodWindow(Food food,MainWindow window)
         {
             _food = food;
             _window = window;
             InitializeComponent();
+            
 
             SetProperties();
         }
@@ -38,6 +40,8 @@ namespace FoodApplication
             txtProteins.Text = _food.Proteins.ToString();
             txtKcal.Text = _food.Kcal.ToString();
             txtKind.Text = _food.Kind;
+            txtPackageWeight.Text = _food.PackageWeight.ToString();
+            chkPackage.IsChecked = _food.Package;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -51,13 +55,16 @@ namespace FoodApplication
                     float.TryParse(txtFat.Text, out float b);
                     float.TryParse(txtProteins.Text, out float c);
                     float.TryParse(txtCarbs.Text, out float d);
+                    float.TryParse(txtPackageWeight.Text, out float f);
 
                     _food.Name = txtName.Text;
-                    _food.Kind = txtName.Text;
+                    _food.Kind = txtKind.Text;
                     _food.Kcal = a;
                     _food.Fat = b;
                     _food.Proteins = c;
                     _food.Carbs = d;
+                    _food.PackageWeight = f;
+                    _food.Package = (bool)chkPackage.IsChecked;
                     Close();
                     }
                 }
@@ -73,6 +80,10 @@ namespace FoodApplication
             if (!float.TryParse(txtProteins.Text, out float c))
                 return false;
             if (!float.TryParse(txtCarbs.Text, out float d))
+                return false;
+            if (!float.TryParse(txtPackageWeight.Text, out float e))
+                return false;
+            if (chkPackage.IsChecked == null)
                 return false;
             return true;
         }
