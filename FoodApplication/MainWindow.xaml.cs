@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 
+
 namespace FoodApplication
 {
     /// <summary>
@@ -56,8 +57,9 @@ namespace FoodApplication
         {
             _db.SaveChanges();
             foodDataGrid.Items.Refresh();
-            mealDataGrid.Items.Refresh();
+            
         }
+        #region FOOD TAB
         /// <summary>
         /// Checking if textboxes have correct values, and are not empty.
         /// </summary>
@@ -103,7 +105,7 @@ namespace FoodApplication
                 Proteins = c,
                 Carbs = d,
                 PackageWeight = e,
-                IsUsed = false,
+                IsUsed = true,
                 Package = f
 
             };
@@ -156,12 +158,19 @@ namespace FoodApplication
         {
             if(foodDataGrid.SelectedItem!=null)
             {
-                MessageBoxResult r = MessageBox.Show("Napewno chcesz usunać?", "Usuwanko?", MessageBoxButton.YesNo);
-                if(r == MessageBoxResult.Yes)
+                if(!((Food)foodDataGrid.SelectedItem).IsUsed)
                 {
-                    Food temp = (Food)foodDataGrid.SelectedItem;
-                    _db.Foods.Remove(temp);
-                    SaveAndRefresh();
+                    MessageBoxResult r = MessageBox.Show("Napewno chcesz usunać?", "Usuwanko?", MessageBoxButton.YesNo);
+                    if (r == MessageBoxResult.Yes)
+                    {
+                        Food temp = (Food)foodDataGrid.SelectedItem;
+                        _db.Foods.Remove(temp);
+                        SaveAndRefresh();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Nie możesz usunąć elementu, który został już raz użyty","STOP!");
                 }
             }
         }
@@ -176,6 +185,8 @@ namespace FoodApplication
         {
             CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource).Refresh();
         }
+    #endregion
+
     }
     
 
