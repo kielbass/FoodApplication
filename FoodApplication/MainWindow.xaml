@@ -78,7 +78,36 @@
                     <Button x:Name="btnSave" Content="Zapisz" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center"  Click="btnSave_Click" Grid.Column="1" Grid.Row="9"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabMeal" Header="Edycja Posiłków"/>
+            <TabItem x:Name="tabMeal" Header="Edycja Posiłków">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/> <!-- 4 -->
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/> <!-- 7 -->
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="dgMealsGrid" Grid.Row="1" Grid.Column="1" Margin="5" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Data" Binding="{Binding Origin.Date, StringFormat='dd/MM/yyyy'}"/>
+                            <DataGridTextColumn Header="Nazwa" Binding="{Binding Origin.Name}"/> 
+                            <DataGridTextColumn Header="Kcal" Binding="{Binding Kcal}"/>
+                            <DataGridTextColumn Header="Białko" Binding="{Binding Proteins"/>
+                            <DataGridTextColumn Header="Węglowodany " Binding="{Binding Carbs}"/>
+                            <DataGridTextColumn Header="Tłuszcz" Binding="{Binding Fat}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
         </TabControl>               
     </Grid>
 </Window>

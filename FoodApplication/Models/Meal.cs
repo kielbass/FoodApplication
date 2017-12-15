@@ -15,7 +15,6 @@ namespace FoodApplication.Models
 
         public string FoodsAndWeightJson { get; set; }
 
-
         //public long Food0 { get; set; }
         //public long Food1 { get; set; }
         //public long Food2 { get; set; }
@@ -41,4 +40,5 @@ namespace FoodApplication.Models
 
 
     }
+
 }

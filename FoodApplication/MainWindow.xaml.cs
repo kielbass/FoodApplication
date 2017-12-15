@@ -15,7 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
-
+using FoodApplication.Classes;
+using System.Collections.ObjectModel;
 
 namespace FoodApplication
 {
@@ -25,7 +26,9 @@ namespace FoodApplication
     public partial class MainWindow : Window
     {
         private FoodContext _db = new FoodContext();
-        CollectionView _foodView;
+        private CollectionView _foodView;
+
+        private ObservableCollection<ReadyMeal> _meals = new ObservableCollection<ReadyMeal>();
         
         public MainWindow()
         {
@@ -47,6 +50,9 @@ namespace FoodApplication
             //For filtering in foodDatagrid
             _foodView = (CollectionView)CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource);
             _foodView.Filter = FoodNameFilter;
+
+            //meals initialize
+            CreateMealsForCollection();
         }
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -57,7 +63,23 @@ namespace FoodApplication
         {
             _db.SaveChanges();
             foodDataGrid.Items.Refresh();
-            
+        }
+
+        private void CreateMealsForCollection()
+        {
+            List<FoodIdWeightPair> pair = new List<FoodIdWeightPair>();
+            pair.Add(new FoodIdWeightPair() { FoodId = 0, FoodWeight = 10 });
+            Meal temp = new Meal() { Date = DateTime.Now, Name = "OBJAT", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
+            _meals.Add(new ReadyMeal(temp));
+            pair.Add(new FoodIdWeightPair() { FoodId = 0, FoodWeight = 10 });
+            temp = new Meal() { Date = DateTime.Now, Name = "OBJAT", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
+            _meals.Add(new ReadyMeal(temp));
+
+            foreach (Meal m in _db.Meals)
+            {
+                _meals.Add(new ReadyMeal(m));
+            }
+            dgMealsGrid.ItemsSource = _meals;
         }
         #region FOOD TAB
         /// <summary>
@@ -186,6 +208,8 @@ namespace FoodApplication
             CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource).Refresh();
         }
     #endregion
+
+
 
     }
     
