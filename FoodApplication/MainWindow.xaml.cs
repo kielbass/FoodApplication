@@ -69,10 +69,10 @@ namespace FoodApplication
         {
             List<FoodIdWeightPair> pair = new List<FoodIdWeightPair>();
             pair.Add(new FoodIdWeightPair() { FoodId = 0, FoodWeight = 10 });
-            Meal temp = new Meal() { Date = DateTime.Now, Name = "OBJAT", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
+            Meal temp = new Meal() { Date = DateTime.Now, Name = "ŚNIADANIE", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
             _meals.Add(new ReadyMeal(temp));
             pair.Add(new FoodIdWeightPair() { FoodId = 0, FoodWeight = 10 });
-            temp = new Meal() { Date = DateTime.Now, Name = "OBJAT", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
+            temp = new Meal() { Date = DateTime.Now, Name = "OBIAD", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
             _meals.Add(new ReadyMeal(temp));
 
             foreach (Meal m in _db.Meals)

@@ -100,7 +100,7 @@
                             <DataGridTextColumn Header="Data" Binding="{Binding Origin.Date, StringFormat='dd/MM/yyyy'}"/>
                             <DataGridTextColumn Header="Nazwa" Binding="{Binding Origin.Name}"/> 
                             <DataGridTextColumn Header="Kcal" Binding="{Binding Kcal}"/>
-                            <DataGridTextColumn Header="Białko" Binding="{Binding Proteins"/>
+                            <DataGridTextColumn Header="Białko" Binding="{Binding Proteins}"/>
                             <DataGridTextColumn Header="Węglowodany " Binding="{Binding Carbs}"/>
                             <DataGridTextColumn Header="Tłuszcz" Binding="{Binding Fat}"/>
                         </DataGrid.Columns>
