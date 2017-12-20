@@ -64,7 +64,7 @@ namespace FoodApplication
             _db.SaveChanges();
             foodDataGrid.Items.Refresh();
         }
-
+        //TODO ZROBIC LISTE FOODSOW I DODAWAC JE I ODEJMOWAC
         private void CreateMealsForCollection()
         {
             List<FoodIdWeightPair> pair = new List<FoodIdWeightPair>();
@@ -207,12 +207,11 @@ namespace FoodApplication
         {
             CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource).Refresh();
         }
-    #endregion
+        #endregion
 
+        private void btnAddFoods_Click(object sender, RoutedEventArgs e)
+        {
 
-
+        }
     }
-    
-
-   
 }
