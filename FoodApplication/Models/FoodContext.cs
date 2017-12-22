@@ -4,7 +4,7 @@ namespace FoodApplication.Models
     using System.Data.Entity;
     using System.Linq;
 
-    class FoodContext : DbContext
+    public class FoodContext : DbContext
     {
         // Your context has been configured to use a 'FoodContext' connection string from your application's 
         // configuration file (App.config or Web.config). By default, this connection string targets the 

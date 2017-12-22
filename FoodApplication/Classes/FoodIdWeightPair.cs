@@ -8,7 +8,7 @@ namespace FoodApplication.Classes
 {
     class FoodIdWeightPair
     {
-        public int FoodId { get; set; }
+        public long FoodId { get; set; }
         public float FoodWeight { get; set; }
     }
 }

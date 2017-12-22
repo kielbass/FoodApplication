@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FoodApplication.Models
 {
-    partial class Meal
+    public partial class Meal
     {
         public long MealId { get; set; }
         public DateTime? Date { get; set; }

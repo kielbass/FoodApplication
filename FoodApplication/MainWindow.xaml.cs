@@ -26,12 +26,26 @@ namespace FoodApplication
     public partial class MainWindow : Window
     {
         private FoodContext _db = new FoodContext();
+
+        public FoodContext Db
+        {
+            get
+            {
+                return _db;
+            }
+        }
+        private FoodSearchWindow _foodWin;
+
         private CollectionView _foodView;
 
         private ObservableCollection<ReadyMeal> _meals = new ObservableCollection<ReadyMeal>();
+
+        private ObservableCollection<FoodIdWeightPair> _foodIdWeghhstPairList = new ObservableCollection<FoodIdWeightPair>();
+        private ObservableCollection<Food> _foodMealList = new ObservableCollection<Food>();
         
         public MainWindow()
         {
+
             InitializeComponent();
         }
 
@@ -53,34 +67,77 @@ namespace FoodApplication
 
             //meals initialize
             CreateMealsForCollection();
+
         }
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
             _db.Dispose();
+            if (_foodWin != null && _foodWin.IsLoaded) _foodWin.Close(); 
         }
         public void SaveAndRefresh()
         {
             _db.SaveChanges();
             foodDataGrid.Items.Refresh();
+            dgFoodsForMeal.Items.Refresh();
+            dgFoodsWeight.Items.Refresh();
+            _foodWin.dgFoods.Items.Refresh();
         }
         //TODO ZROBIC LISTE FOODSOW I DODAWAC JE I ODEJMOWAC
         private void CreateMealsForCollection()
         {
-            List<FoodIdWeightPair> pair = new List<FoodIdWeightPair>();
-            pair.Add(new FoodIdWeightPair() { FoodId = 0, FoodWeight = 10 });
-            Meal temp = new Meal() { Date = DateTime.Now, Name = "ŚNIADANIE", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
-            _meals.Add(new ReadyMeal(temp));
-            pair.Add(new FoodIdWeightPair() { FoodId = 0, FoodWeight = 10 });
-            temp = new Meal() { Date = DateTime.Now, Name = "OBIAD", FoodsAndWeightJson = Newtonsoft.Json.JsonConvert.SerializeObject(pair) };
-            _meals.Add(new ReadyMeal(temp));
-
-            foreach (Meal m in _db.Meals)
-            {
-                _meals.Add(new ReadyMeal(m));
-            }
             dgMealsGrid.ItemsSource = _meals;
+            dgFoodsForMeal.ItemsSource = _foodMealList;
+            dgFoodsWeight.ItemsSource = _foodIdWeghhstPairList;
         }
+        public void AddFoodToCollection(long i)
+        {
+            if (_foodIdWeghhstPairList.ToList().Find(x => x.FoodId == i) == null)
+            {
+                _foodIdWeghhstPairList.Add(new FoodIdWeightPair() { FoodId = i, FoodWeight = 0f });
+                Food[] temp = _db.Foods.Select(x => x).Where(x => x.FoodId == i).ToArray();
+
+                _foodMealList.Add(temp[0]);
+            }
+            else
+            {
+                Food[] temp = _db.Foods.Select(x => x).Where(x => x.FoodId == i).ToArray();
+
+                MessageBox.Show("Dodałeś już " + temp[0].Name + "!","Powtóreczka?");
+            }
+
+        }
+        private void btnAddFoods_Click(object sender, RoutedEventArgs e)
+        {
+            if(_foodWin==null)
+            {
+                _foodWin = new FoodSearchWindow(this);
+                _foodWin.Show();
+            }
+            else if(!_foodWin.IsLoaded)
+            {
+                _foodWin = new FoodSearchWindow(this);
+                _foodWin.Show();
+            }
+            else
+            {
+                _foodWin.Focus();
+            }
+
+        }
+        //Context Menu Remove from Food collections in Meals edit
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            if (dgFoodsForMeal.SelectedItem != null)
+            {
+                Food temp = (Food)dgFoodsForMeal.SelectedItem;
+                int i = _foodMealList.IndexOf(temp);
+                _foodMealList.RemoveAt(i);
+                _foodIdWeghhstPairList.RemoveAt(i);
+            }
+
+        }
+
         #region FOOD TAB
         /// <summary>
         /// Checking if textboxes have correct values, and are not empty.
@@ -207,11 +264,8 @@ namespace FoodApplication
         {
             CollectionViewSource.GetDefaultView(foodDataGrid.ItemsSource).Refresh();
         }
+
         #endregion
 
-        private void btnAddFoods_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
