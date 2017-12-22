@@ -42,13 +42,11 @@ namespace FoodApplication
 
         private ObservableCollection<FoodIdWeightPair> _foodIdWeghhstPairList = new ObservableCollection<FoodIdWeightPair>();
         private ObservableCollection<Food> _foodMealList = new ObservableCollection<Food>();
-        
+        //TODO DATE SPRAWDZANIE CZY USTAWIONA !!! W TABELI PoSILKOW ABY TYLKO Z USTAWIONEGO DNIA SIE POKAZYWALO
         public MainWindow()
         {
-
             InitializeComponent();
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -83,12 +81,15 @@ namespace FoodApplication
             dgFoodsWeight.Items.Refresh();
             _foodWin.dgFoods.Items.Refresh();
         }
-        //TODO ZROBIC LISTE FOODSOW I DODAWAC JE I ODEJMOWAC
         private void CreateMealsForCollection()
         {
             dgMealsGrid.ItemsSource = _meals;
             dgFoodsForMeal.ItemsSource = _foodMealList;
             dgFoodsWeight.ItemsSource = _foodIdWeghhstPairList;
+            foreach(Meal m in _db.Meals)
+            {
+                _meals.Add(new ReadyMeal(m, _db));
+            }
         }
         public void AddFoodToCollection(long i)
         {
@@ -267,5 +268,23 @@ namespace FoodApplication
 
         #endregion
 
+        private void btnAddMeal_Click(object sender, RoutedEventArgs e)
+        {
+            string n="";
+            DateTime? d = new DateTime();
+            if(!string.IsNullOrEmpty(txtMealName.Text))
+            {
+                n = txtMealName.Text;
+            }
+            if(!string.IsNullOrEmpty(dateMeals.Text))
+            {
+                d = (DateTime)dateMeals.SelectedDate;
+            }
+            ReadyMeal temp = new ReadyMeal(n, d, _foodIdWeghhstPairList.ToList(), _db);
+            _meals.Add(temp);
+            temp.Save();
+            _db.Meals.Add(temp.Origin);
+            SaveAndRefresh();
+        }
     }
 }

@@ -26,8 +26,6 @@ namespace FoodApplication
 
         private CollectionView _foodView;
 
-
-        //TODO ZROBIC TO OKNO szukanie, dodawanie, i szukanie po rodzaju ;)
         public FoodSearchWindow(MainWindow window)
         {
             _window = window;
