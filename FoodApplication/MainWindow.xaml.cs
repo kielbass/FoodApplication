@@ -37,12 +37,15 @@ namespace FoodApplication
         private FoodSearchWindow _foodWin;
 
         private CollectionView _foodView;
+        private CollectionView _mealsViewEdit;
 
         private ObservableCollection<ReadyMeal> _meals = new ObservableCollection<ReadyMeal>();
 
         private ObservableCollection<FoodIdWeightPair> _foodIdWeghhstPairList = new ObservableCollection<FoodIdWeightPair>();
         private ObservableCollection<Food> _foodMealList = new ObservableCollection<Food>();
-        //TODO DATE SPRAWDZANIE CZY USTAWIONA !!! W TABELI PoSILKOW ABY TYLKO Z USTAWIONEGO DNIA SIE POKAZYWALO
+        //TODO SPRAWIC ABY PODLICZAŁO DLA DANEGO DNIA ILEŻ TO JESZCZE MOŻNA ZEŻREC TRZEBA WPROWADZIC DANE UZYTKOWNIKA PRAWDOPODOBNIEZ XD
+        List<Day> _days = new List<Day>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,9 +55,11 @@ namespace FoodApplication
 
             System.Windows.Data.CollectionViewSource foodViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("foodViewSource")));
             System.Windows.Data.CollectionViewSource mealViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("mealViewSource")));
+            System.Windows.Data.CollectionViewSource personViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("personViewSource")));
 
             _db.Foods.Load();
             _db.Meals.Load();
+            _db.Persons.Load();
 
             mealViewSource.Source = _db.Meals.Local;
             foodViewSource.Source = _db.Foods.Local;
@@ -66,6 +71,19 @@ namespace FoodApplication
             //meals initialize
             CreateMealsForCollection();
 
+            //datepicker default date
+            dateMeals.SelectedDate = DateTime.Today;
+
+            //filtering meals in edit tab
+            _mealsViewEdit = (CollectionView)CollectionViewSource.GetDefaultView(dgMealsGrid.ItemsSource);
+            _mealsViewEdit.Filter = MealsDateFilter;
+
+            if(_db.Persons.Count() == 0)
+            {
+                PersonWindow temp = new PersonWindow(this);
+                temp.ShowDialog();
+            }
+
         }
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -73,14 +91,25 @@ namespace FoodApplication
             _db.Dispose();
             if (_foodWin != null && _foodWin.IsLoaded) _foodWin.Close(); 
         }
+        private void SetUpStatTab()
+        {
+            _days.Clear();
+            List<ReadyMeal> temp = _meals.Select(x=>x).OrderByDescending(x=>x.Origin.Date).ToList();
+            //TODO TAK DALEJ XD NIE CHCE MI SIE DZISIAJ ROBIC
+
+        }
         public void SaveAndRefresh()
         {
             _db.SaveChanges();
             foodDataGrid.Items.Refresh();
             dgFoodsForMeal.Items.Refresh();
             dgFoodsWeight.Items.Refresh();
-            _foodWin.dgFoods.Items.Refresh();
+            if(_foodWin!=null)
+                _foodWin.dgFoods.Items.Refresh();
+            dgMealsGrid.Items.Refresh();
         }
+
+        #region MEALTAB
         private void CreateMealsForCollection()
         {
             dgMealsGrid.ItemsSource = _meals;
@@ -139,6 +168,53 @@ namespace FoodApplication
 
         }
 
+        private void btnAddMeal_Click(object sender, RoutedEventArgs e)
+        {
+            string n = "";
+            DateTime? d = new DateTime();
+            if (!string.IsNullOrEmpty(txtMealName.Text))
+            {
+                n = txtMealName.Text;
+            }
+            if (!string.IsNullOrEmpty(dateMeals.Text))
+            {
+                d = (DateTime)dateMeals.SelectedDate;
+            }
+            ReadyMeal temp = new ReadyMeal(n, d, _foodIdWeghhstPairList.ToList(), _db);
+            _meals.Add(temp);
+            temp.Save();
+            _db.Meals.Add(temp.Origin);
+            SaveAndRefresh();
+        }
+        private bool MealsDateFilter(Object item)
+        {
+            if (String.IsNullOrEmpty(dateMeals.SelectedDate.ToString()))
+                return true;
+            else
+                return ((item as ReadyMeal).Origin.Date.ToString().IndexOf(dateMeals.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        private void dateMeals_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CollectionViewSource.GetDefaultView(dgMealsGrid.ItemsSource).Refresh();
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            if (dgMealsGrid.SelectedItem != null)
+            {
+                MessageBoxResult r = MessageBox.Show("Napewno chcesz usunać?", "Usuwanko?", MessageBoxButton.YesNo);
+                if (r == MessageBoxResult.Yes)
+                {
+                    ReadyMeal temp = (ReadyMeal)dgMealsGrid.SelectedItem;
+                    Meal[] m = _db.Meals.Select(x => x).Where(x => x.MealId == temp.Origin.MealId).ToArray();
+                    _db.Meals.Remove(m[0]);
+                    _meals.Remove(temp);
+                    SaveAndRefresh();
+                }
+            }
+        }
+#endregion
         #region FOOD TAB
         /// <summary>
         /// Checking if textboxes have correct values, and are not empty.
@@ -268,23 +344,11 @@ namespace FoodApplication
 
         #endregion
 
-        private void btnAddMeal_Click(object sender, RoutedEventArgs e)
+
+        private void btnPerson_Click(object sender, RoutedEventArgs e)
         {
-            string n="";
-            DateTime? d = new DateTime();
-            if(!string.IsNullOrEmpty(txtMealName.Text))
-            {
-                n = txtMealName.Text;
-            }
-            if(!string.IsNullOrEmpty(dateMeals.Text))
-            {
-                d = (DateTime)dateMeals.SelectedDate;
-            }
-            ReadyMeal temp = new ReadyMeal(n, d, _foodIdWeghhstPairList.ToList(), _db);
-            _meals.Add(temp);
-            temp.Save();
-            _db.Meals.Add(temp.Origin);
-            SaveAndRefresh();
+            PersonWindow temp = new PersonWindow(this);
+            temp.ShowDialog();
         }
     }
 }

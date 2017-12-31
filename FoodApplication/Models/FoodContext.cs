@@ -21,6 +21,7 @@ namespace FoodApplication.Models
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<Meal> Meals { get; set; }
+        public virtual DbSet<Person> Persons { get; set; }
         // public virtual DbSet<MyEntity> MyEntities { get; set; }
     }
 

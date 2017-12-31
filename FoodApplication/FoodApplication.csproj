@@ -80,6 +80,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\Day.cs" />
     <Compile Include="Classes\FoodIdWeightPair.cs" />
     <Compile Include="Classes\ReadyMeal.cs" />
     <Compile Include="EditFoodWindow.xaml.cs">
@@ -92,6 +93,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PersonWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Migrations\201711301106001_InitialCreate.cs" />
@@ -102,6 +107,10 @@
     <Compile Include="Models\Food.cs" />
     <Compile Include="Models\FoodContext.cs" />
     <Compile Include="Models\Meal.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="PersonWindow.xaml.cs">
+      <DependentUpon>PersonWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
