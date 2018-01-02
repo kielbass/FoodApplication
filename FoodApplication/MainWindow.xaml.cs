@@ -44,7 +44,8 @@ namespace FoodApplication
         private ObservableCollection<FoodIdWeightPair> _foodIdWeghhstPairList = new ObservableCollection<FoodIdWeightPair>();
         private ObservableCollection<Food> _foodMealList = new ObservableCollection<Food>();
         //TODO SPRAWIC ABY PODLICZAŁO DLA DANEGO DNIA ILEŻ TO JESZCZE MOŻNA ZEŻREC TRZEBA WPROWADZIC DANE UZYTKOWNIKA PRAWDOPODOBNIEZ XD
-        List<Day> _days = new List<Day>();
+        ObservableCollection<Day> _days = new ObservableCollection<Day>();
+        Person _actualPerson = new Person();
 
         public MainWindow()
         {
@@ -78,25 +79,14 @@ namespace FoodApplication
             _mealsViewEdit = (CollectionView)CollectionViewSource.GetDefaultView(dgMealsGrid.ItemsSource);
             _mealsViewEdit.Filter = MealsDateFilter;
 
-            if(_db.Persons.Count() == 0)
-            {
-                PersonWindow temp = new PersonWindow(this);
-                temp.ShowDialog();
-            }
-
+            dgDayStat.ItemsSource = _days;
+            SetUpStatTab();
         }
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
             _db.Dispose();
-            if (_foodWin != null && _foodWin.IsLoaded) _foodWin.Close(); 
-        }
-        private void SetUpStatTab()
-        {
-            _days.Clear();
-            List<ReadyMeal> temp = _meals.Select(x=>x).OrderByDescending(x=>x.Origin.Date).ToList();
-            //TODO TAK DALEJ XD NIE CHCE MI SIE DZISIAJ ROBIC
-
+            if (_foodWin != null && _foodWin.IsLoaded) _foodWin.Close();
         }
         public void SaveAndRefresh()
         {
@@ -104,11 +94,75 @@ namespace FoodApplication
             foodDataGrid.Items.Refresh();
             dgFoodsForMeal.Items.Refresh();
             dgFoodsWeight.Items.Refresh();
-            if(_foodWin!=null)
+            if (_foodWin != null)
                 _foodWin.dgFoods.Items.Refresh();
             dgMealsGrid.Items.Refresh();
+
+            SetUpStatTab();
+        }
+        #region STATS TAB
+        private void SetUpStatTab()
+        {
+            if (_db.Persons.Count() == 0)
+            {
+                PersonWindow temp = new PersonWindow(this);
+                temp.ShowDialog();
+            }
+            List<Day> list = new List<Day>();
+            //Days list
+            foreach (ReadyMeal r in _meals)
+            {
+                Day day = list.Find(x => x.Date == r.Origin.Date);
+                if (day == null)
+                {
+                    list.Add(new Day(r.Origin.Date));
+                    day = list.Find(x => x.Date == r.Origin.Date);
+                }
+                day.ReadyMeals.Add(r);
+            }
+            list = list.Select(x => x).OrderBy(x => x.Date).ToList();
+            //persons for Days list
+            Person[] personArray = _db.Persons.Select(x => x).OrderBy(x => x.Date).ToArray();
+            int k = 0;
+            foreach (Day d in list)
+            {
+                if (k != personArray.Count() - 1)
+                {
+                    if (d.Date < personArray[k].Date)
+                    {
+                        d.Person = personArray[k];
+                    }
+                    else
+                    {
+                        k++;
+                        d.Person = personArray[k];
+                    }
+                }
+                else
+                {
+                    d.Person = personArray[k];
+                }
+            }
+            list = list.Select(x => x).OrderByDescending(x => x.Date).ToList();
+            _days.Clear();
+            foreach(Day d in list)
+            {
+                _days.Add(d);
+            }
+            //Calculate plans (FOR NOW ONLY 1 PLAN BY PROTEINS)
+            foreach (Day d in _days)
+            {
+                d.CalculateByProteins(1.1f);
+            }
+            dgDayStat.Items.Refresh();
         }
 
+        private void btnPerson_Click(object sender, RoutedEventArgs e)
+        {
+            PersonWindow temp = new PersonWindow(this);
+            temp.ShowDialog();
+        }
+        #endregion
         #region MEALTAB
         private void CreateMealsForCollection()
         {
@@ -345,10 +399,5 @@ namespace FoodApplication
         #endregion
 
 
-        private void btnPerson_Click(object sender, RoutedEventArgs e)
-        {
-            PersonWindow temp = new PersonWindow(this);
-            temp.ShowDialog();
-        }
     }
 }

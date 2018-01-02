@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FoodApplication"
         xmlns:Models="clr-namespace:FoodApplication.Models" x:Class="FoodApplication.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1150" Loaded="Window_Loaded">
+        Title="FoodApp (Alpha bardzo wersja)" Height="500" Width="1250" Loaded="Window_Loaded">
     <Window.Resources>
         <CollectionViewSource x:Key="foodViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Food}, CreateList=True}"/>
         <CollectionViewSource x:Key="mealViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Meal}, CreateList=True}"/>
@@ -29,11 +29,21 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" MinHeight="40"/>
                         <RowDefinition Height="300"/>
                     </Grid.RowDefinitions>
                     <TextBlock x:Name="txtPerson" Grid.Column="0" Grid.Row="0" Margin="5" MinWidth="300"/>
-                    <Button x:Name="btnPerson" Grid.Column="1" Grid.Row="0" Margin="5,5,5,0" Content="Edytuj Twoje dane" Height="21" VerticalAlignment="Top" Click="btnPerson_Click"/>
+                    <Button x:Name="btnPerson" Grid.Column="1" Grid.Row="0" Margin="5" Content="Edytuj Twoje dane" Height="21" VerticalAlignment="Top" Click="btnPerson_Click"/>
+                    <DataGrid x:Name="dgDayStat" Grid.Column="0" Grid.Row="0" Margin="5" IsReadOnly="True" AutoGenerateColumns="False" Grid.RowSpan="2" MinWidth="400">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Data" Binding="{Binding Date, StringFormat='dd/MM/yyyy'}"/>
+                            <DataGridTextColumn Header="Kcal" Binding="{Binding KcalText}"/>
+                            <DataGridTextColumn Header="Białko" Binding="{Binding ProteinsText}"/>
+                            <DataGridTextColumn Header="Węglowowany" Binding="{Binding CarbsText}"/>
+                            <DataGridTextColumn Header="Tłuszcz" Binding="{Binding FatText}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabMeal" Header="Edycja Posiłków">
