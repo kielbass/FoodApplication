@@ -20,6 +20,19 @@ namespace FoodApplication.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            if(context.Foods.Count()==0)
+            {
+                context.Foods.Add(new Models.Food
+                {
+                    Name = "filet z piersi kurczaka",
+                    Kcal = 116f,
+                    Fat = 3.2f,
+                    Proteins = 21.8f,
+                    Carbs = 0f,
+                    Package = false,
+                    Kind = "miêso"
+                });
+            }
         }
     }
 }

@@ -52,20 +52,23 @@ namespace FoodApplication.Classes
             Fat = 0;
             foreach (FoodIdWeightPair fp in FoodAndWeightList)
             {
-                Food[] temp = _db.Foods.Select(x => x).Where(x => x.FoodId == fp.FoodId).ToArray();
-                if(temp[0].Package)
+                List<Food> temp = _db.Foods.Select(x => x).Where(x => x.FoodId == fp.FoodId).ToList();
+                if(temp.Count() >0)
                 {
-                    Kcal += ((temp[0].PackageWeight * temp[0].Kcal) / 100)*fp.FoodWeight;
-                    Proteins += ((temp[0].PackageWeight * temp[0].Proteins) / 100) * fp.FoodWeight;
-                    Fat += ((temp[0].PackageWeight * temp[0].Fat) / 100) * fp.FoodWeight;
-                    Carbs += ((temp[0].PackageWeight * temp[0].Carbs) / 100) * fp.FoodWeight;
-                }
-                else
-                {
-                    Kcal += (temp[0].Kcal / 100) * fp.FoodWeight;
-                    Proteins += (temp[0].Proteins / 100) * fp.FoodWeight;
-                    Fat += (temp[0].Fat / 100) * fp.FoodWeight;
-                    Carbs += (temp[0].Carbs / 100) * fp.FoodWeight;
+                    if (temp[0].Package)
+                    {
+                        Kcal += ((temp[0].PackageWeight * temp[0].Kcal) / 100) * fp.FoodWeight;
+                        Proteins += ((temp[0].PackageWeight * temp[0].Proteins) / 100) * fp.FoodWeight;
+                        Fat += ((temp[0].PackageWeight * temp[0].Fat) / 100) * fp.FoodWeight;
+                        Carbs += ((temp[0].PackageWeight * temp[0].Carbs) / 100) * fp.FoodWeight;
+                    }
+                    else
+                    {
+                        Kcal += (temp[0].Kcal / 100) * fp.FoodWeight;
+                        Proteins += (temp[0].Proteins / 100) * fp.FoodWeight;
+                        Fat += (temp[0].Fat / 100) * fp.FoodWeight;
+                        Carbs += (temp[0].Carbs / 100) * fp.FoodWeight;
+                    }
                 }
             }
         }
