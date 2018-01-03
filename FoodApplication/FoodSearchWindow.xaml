@@ -31,7 +31,7 @@
                 <DataGridTextColumn Header="Kcal [kcal]" Binding="{Binding Kcal}"/>
                 <DataGridTextColumn Header="Białko [g]" Binding="{Binding Proteins}"/>
                 <DataGridTextColumn Header="Węglowodany [g]" Binding="{Binding Carbs}"/>
-                <DataGridTextColumn Header="Tłuszcz [g]" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Tłuszcz [g]" Binding="{Binding Fat}"/>
                 <DataGridCheckBoxColumn Header="Opakowanie?" Binding="{Binding Package}"/>
             </DataGrid.Columns>
         </DataGrid>

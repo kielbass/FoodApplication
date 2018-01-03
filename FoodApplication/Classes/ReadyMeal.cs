@@ -53,8 +53,7 @@ namespace FoodApplication.Classes
             foreach (FoodIdWeightPair fp in FoodAndWeightList)
             {
                 List<Food> temp = _db.Foods.Select(x => x).Where(x => x.FoodId == fp.FoodId).ToList();
-                if(temp.Count() >0)
-                {
+                temp[0].IsUsed = true;
                     if (temp[0].Package)
                     {
                         Kcal += ((temp[0].PackageWeight * temp[0].Kcal) / 100) * fp.FoodWeight;
@@ -69,7 +68,6 @@ namespace FoodApplication.Classes
                         Fat += (temp[0].Fat / 100) * fp.FoodWeight;
                         Carbs += (temp[0].Carbs / 100) * fp.FoodWeight;
                     }
-                }
             }
         }
         public void Save()
