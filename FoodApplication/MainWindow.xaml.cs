@@ -128,7 +128,7 @@ namespace FoodApplication
             {
                 if (k != personArray.Count() - 1)
                 {
-                    if (d.Date < personArray[k].Date)
+                    if (d.Date < personArray[k+1].Date)
                     {
                         d.Person = personArray[k];
                     }
